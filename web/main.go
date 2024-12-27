@@ -7,21 +7,23 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", homehandler)
-	http.HandleFunc("/about", abouthandler)
-	http.HandleFunc("/contact", contacthandler)
+	http.HandleFunc("/", homeHandler)
+	http.HandleFunc("/products", productsHandler)
+	http.HandleFunc("/products/detail/", productDetailHandler)
 
+	fmt.Println("El servidor está escuchando en el puerto 8080...")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func homehandler(w http.ResponseWriter, r *http.Request) {
+func homeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "¡Bienvenido a la página de inicio!")
 }
 
-func abouthandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "¡Esta es la página 'Acerca de nosotros'")
+func productsHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Aquí se muestran todos los productos disponibles")
 }
 
-func contacthandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Póngase en contacto con nosotros en mikemonzo.com")
+func productDetailHandler(w http.ResponseWriter, r *http.Request) {
+	productID := r.URL.Path[len("/products/detail/"):]
+	fmt.Fprintf(w, "Detalles del producto con ID: %s", productID)
 }
