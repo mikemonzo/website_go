@@ -2,17 +2,26 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, World!")
+func main() {
+	http.HandleFunc("/", homehandler)
+	http.HandleFunc("/about", abouthandler)
+	http.HandleFunc("/contact", contacthandler)
+
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func main() {
-	http.HandleFunc("/", handler)
+func homehandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "¡Bienvenido a la página de inicio!")
+}
 
-	fmt.Println("Server is running on port :8080")
+func abouthandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "¡Esta es la página 'Acerca de nosotros'")
+}
 
-	http.ListenAndServe(":8080", nil)
+func contacthandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Póngase en contacto con nosotros en mikemonzo.com")
 }
