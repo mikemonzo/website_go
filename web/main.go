@@ -37,7 +37,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 		Message: template.HTML("<b>Bienvenido</b> a la página de inicio"),
 	}
 
-	tmplFile := filepath.Join("web/templates/", "home.html")
+	tmplFile := filepath.Join("web/templates/", "index.html")
 	renderTemplate(w, tmplFile, pageData)
 
 }
