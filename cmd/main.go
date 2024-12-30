@@ -4,24 +4,21 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/mikemonzo/website_go/internal/config"
+	"github.com/mikemonzo/website_go/internal/routes"
 )
 
 func main() {
-	http.HandleFunc("/", homehandler)
-	http.HandleFunc("/about", abouthandler)
-	http.HandleFunc("/contact", contacthandler)
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
-}
+	cfg := config.LoadConfig()
 
-func homehandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "¡Bienvenido a la página de inicio!")
-}
+	routes.LoadRoutes()
 
-func abouthandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "¡Esta es la página 'Acerca de nosotros'")
-}
+	addr := cfg.HTTPHOST + ":" + cfg.HTTPPort
 
-func contacthandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Póngase en contacto con nosotros en mikemonzo.com")
+	server := &http.Server{Addr: addr, Handler: nil}
+
+	fmt.Println("Servidor web escuchando en http://" + addr)
+	log.Fatal(server.ListenAndServe())
 }

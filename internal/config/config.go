@@ -8,6 +8,7 @@ import (
 
 type Config struct {
 	HTTPPort string
+	HTTPHOST string
 }
 
 func LoadConfig() *Config {
@@ -23,6 +24,7 @@ func LoadConfig() *Config {
 
 	cfg := &Config{
 		HTTPPort: viper.GetString("http.port"),
+		HTTPHOST: viper.GetString("http.host"),
 	}
 
 	return cfg

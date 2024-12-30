@@ -25,7 +25,7 @@ func renderTemplate(w http.ResponseWriter, tmplFile string, data interface{}) {
 	}
 }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
+func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	pageData := models.PageData{
 		Title:   "Home",
 		Author:  "Mike Monzo",
@@ -51,7 +51,7 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func errorHandler(w http.ResponseWriter, r *http.Request) {
+func ErrorHandler(w http.ResponseWriter, r *http.Request) {
 	pageData := models.PageData{
 		Title:        "¡Página no encontrada!",
 		ErrorCode:    http.StatusInternalServerError,
