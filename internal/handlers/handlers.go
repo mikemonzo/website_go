@@ -34,7 +34,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 	page := r.URL.Path[1:]
 
-	if page != "" {
+	if page == "" {
 		page = "index.html"
 	}
 

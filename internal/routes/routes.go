@@ -11,5 +11,5 @@ func LoadRoutes() {
 	http.HandleFunc("/error", handlers.ErrorHandler)
 
 	fs := http.FileServer(http.Dir("web/static"))
-	http.Handle("/statis/", http.StripPrefix("/static/", fs))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
 }
