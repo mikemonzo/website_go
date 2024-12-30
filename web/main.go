@@ -2,28 +2,65 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"log"
 	"net/http"
+	"path/filepath"
 )
 
-func main() {
-	http.HandleFunc("/", homeHandler)
-	http.HandleFunc("/products", productsHandler)
-	http.HandleFunc("/products/detail/", productDetailHandler)
+type PageData struct {
+	Title        string
+	Message      template.HTML
+	ErrorCode    int
+	ErrorMessage string
+}
 
-	fmt.Println("El servidor está escuchando en el puerto 8080...")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+func renderTemplate(w http.ResponseWriter, tmplFile string, data PageData) {
+	tmpl, err := template.ParseFiles(tmplFile)
+
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	err = tmpl.Execute(w, data)
+
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
 }
 
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "¡Bienvenido a la página de inicio!")
+	pageData := PageData{
+		Title:   "Home",
+		Message: template.HTML("<b>Bienvenido</b> a la página de inicio"),
+	}
+
+	tmplFile := filepath.Join("web/templates/", "home.html")
+	renderTemplate(w, tmplFile, pageData)
+
 }
 
-func productsHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Aquí se muestran todos los productos disponibles")
+func errorHandler(w http.ResponseWriter, r *http.Request) {
+	pageData := PageData{
+		Title:        "Error 404",
+		ErrorCode:    404,
+		ErrorMessage: "¡Página no encontrada!",
+	}
+
+	tmplFile := filepath.Join("web/templates/", "error.html")
+	renderTemplate(w, tmplFile, pageData)
+
 }
 
-func productDetailHandler(w http.ResponseWriter, r *http.Request) {
-	productID := r.URL.Path[len("/products/detail/"):]
-	fmt.Fprintf(w, "Detalles del producto con ID: %s", productID)
+func main() {
+	fs := http.FileServer(http.Dir(filepath.Join("web", "static")))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	http.HandleFunc("/", homeHandler)
+	http.HandleFunc("/error", errorHandler)
+
+	fmt.Println("El servidor está escuchando en el puerto 8080...")
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
