@@ -7,6 +7,6 @@ root = "."
     watch = ["web", "internal", "cmd"]
 
 [run]
-    executable = "./tmp/main.exe"
+    executable = "./tmp/main"
 
     
